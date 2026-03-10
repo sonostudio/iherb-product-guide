@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iHerb Supplement Guide — Analytics Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-950: #0a1a0a;
+    --green-900: #0f2410;
+    --green-800: #1a3d1a;
+    --green-700: #2d5a2d;
+    --green-600: #3d7a3d;
+    --green-500: #4e9a4e;
+    --green-400: #6ab86a;
+    --green-300: #95c995;
+    --green-200: #c2e0c2;
+    --green-100: #eaf4ea;
+    --green-50:  #f4faf4;
+
+    --amber-500: #f59e0b;
+    --amber-100: #fef3c7;
+    --amber-50:  #fffbeb;
+
+    --blue-500: #3b82f6;
+    --blue-100: #dbeafe;
+
+    --red-500: #ef4444;
+    --red-100: #fee2e2;
+
+    --text-primary:   #0d1a0d;
+    --text-secondary: #3a4f3a;
+    --text-muted:     #7a9270;
+
+    --border: #e2efe2;
+    --white: #ffffff;
+    --bg: #f0f7f0;
+
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 4px rgba(13,31,13,0.06), 0 4px 16px rgba(13,31,13,0.06);
+    --shadow-md: 0 4px 24px rgba(13,31,13,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Sidebar ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 220px;
+    background: var(--green-900);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 0;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 10;
+  }
+
+  .sidebar-logo {
+    padding: 0 24px 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .sidebar-logo .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: -0.3px;
+  }
+
+  .sidebar-logo .logo-sub {
+    font-size: 10px;
+    color: var(--green-300);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .sidebar-nav {
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+
+  .nav-section-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    padding: 14px 12px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+  .nav-item.active { background: rgba(255,255,255,0.1); color: var(--white); }
+  .nav-item .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* ── Main ── */
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    padding: 32px 36px;
+    max-width: calc(100% - 220px);
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .page-title {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .date-range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+
+  /* ── Section header ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .section-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+
+  .badge-sono {
+    background: var(--green-100);
+    color: var(--green-700);
+  }
+
+  .badge-iherb {
+    background: var(--amber-100);
+    color: #92400e;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* ── KPI grid ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .kpi-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .kpi-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--green-500);
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .kpi-card.amber::before { background: var(--amber-500); }
+  .kpi-card.blue::before  { background: var(--blue-500); }
+  .kpi-card.red::before   { background: var(--red-500); }
+  .kpi-card.dashed { border-style: dashed; border-color: #d4c5a0; background: var(--amber-50); }
+  .kpi-card.dashed::before { background: var(--amber-500); }
+
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .kpi-value {
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--text-primary);
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  .kpi-value.placeholder {
+    color: #c8b98a;
+    font-style: italic;
+    font-size: 22px;
+  }
+
+  .kpi-delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 6px;
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
+
+  .kpi-delta.up   { background: var(--green-100); color: var(--green-700); }
+  .kpi-delta.down { background: var(--red-100); color: var(--red-500); }
+  .kpi-delta.neutral { background: var(--green-100); color: var(--text-muted); }
+
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  .requires-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #92400e;
+    background: var(--amber-100);
+    padding: 3px 8px;
+    border-radius: 20px;
+    margin-top: 8px;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── Charts row ── */
+  .charts-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .charts-row-equal {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .chart-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+
+  .chart-card.dashed {
+    border-style: dashed;
+    border-color: #d4c5a0;
+    background: var(--amber-50);
+  }
+
+  .chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .chart-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .chart-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .chart-container { position: relative; height: 180px; }
+  .chart-container-sm { position: relative; height: 160px; }
+
+  /* ── Topics list ── */
+  .topics-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .topic-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .topic-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    width: 130px;
+    flex-shrink: 0;
+  }
+
+  .topic-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: var(--green-100);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .topic-bar {
+    height: 100%;
+    background: var(--green-500);
+    border-radius: 3px;
+    transition: width 0.6s ease;
+  }
+
+  .topic-pct {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    width: 32px;
+    text-align: right;
+  }
+
+  /* ── Off-topic table ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .data-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0 10px 10px;
+    border-bottom: 1.5px solid var(--border);
+  }
+
+  .data-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--green-50);
+    color: var(--text-secondary);
+    vertical-align: middle;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--green-50); }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .tag-red   { background: var(--red-100);  color: var(--red-500); }
+  .tag-amber { background: var(--amber-100); color: #92400e; }
+  .tag-green { background: var(--green-100); color: var(--green-700); }
+
+  /* ── Placeholder chart ── */
+  .placeholder-chart {
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 2px dashed #d4c5a0;
+    border-radius: var(--radius-sm);
+    color: #c8b98a;
+  }
+
+  .placeholder-chart .ph-icon { font-size: 28px; opacity: 0.6; }
+  .placeholder-chart .ph-text { font-size: 12px; font-weight: 500; text-align: center; line-height: 1.5; }
+
+  /* ── Section spacer ── */
+  .section-spacer { margin-bottom: 32px; }
+
+  /* ── Sample data banner ── */
+  .sample-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--amber-50);
+    border: 1.5px dashed #d4c5a0;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #78480a;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .sample-banner-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .sample-banner strong { font-weight: 700; }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--green-200); border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo">iHerb</div>
+      <div class="logo-sub">Analytics Dashboard</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active">
+        <span class="nav-icon">📊</span> Dashboard
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">💬</span> Conversations
+      </div>
+      <div class="nav-section-label">Engagement</div>
+      <div class="nav-item">
+        <span class="nav-icon">🎯</span> Topics & Goals
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">⚠️</span> Off-topic Monitor
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📅</span> Daily Stack Usage
+      </div>
+      <div class="nav-section-label">Commerce</div>
+      <div class="nav-item">
+        <span class="nav-icon">🛒</span> Conversion
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">💰</span> Revenue Impact
+      </div>
+      <div class="nav-section-label">Settings</div>
+      <div class="nav-item">
+        <span class="nav-icon">⚙️</span> Configuration
+      </div>
+    </nav>
+    <div class="sidebar-footer">Prototype · Sono Studio</div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div>
+        <div class="page-title">Dashboard</div>
+        <div class="page-subtitle">Supplement Guide performance overview</div>
+      </div>
+      <div class="date-range">
+        📅 &nbsp;Last 30 days &nbsp;▾
+      </div>
+    </div>
+
+    <!-- ── SECTION 1: Sono Studio metrics ── -->
+    <div class="section-spacer">
+      <div class="section-header">
+        <span class="section-title">Engagement Metrics</span>
+        <span class="section-badge badge-sono">✦ Provided by Sono Studio</span>
+        <span class="section-line"></span>
+        <span class="section-note">Available from day one · no iHerb integration required</span>
+      </div>
+
+      <!-- KPI row 1 -->
+      <div class="kpi-grid" style="margin-bottom:14px">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Sessions</div>
+          <div class="kpi-value">24,831</div>
+          <div class="kpi-delta up">↑ 18% vs prev period</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Total Messages</div>
+          <div class="kpi-value">148,294</div>
+          <div class="kpi-delta up">↑ 22%</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Daily Active Users</div>
+          <div class="kpi-value">3,210</div>
+          <div class="kpi-delta up">↑ 9%</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Avg. Messages / Session</div>
+          <div class="kpi-value">5.97</div>
+          <div class="kpi-delta neutral">— stable</div>
+        </div>
+      </div>
+
+      <!-- KPI row 2 -->
+      <div class="kpi-grid" style="margin-bottom:14px">
+        <div class="kpi-card">
+          <div class="kpi-label">Return Session Rate</div>
+          <div class="kpi-value">34.2%</div>
+          <div class="kpi-delta up">↑ 5pp</div>
+          <div class="kpi-sub">Users who started 2+ sessions</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Daily Stack Generated</div>
+          <div class="kpi-value">9,104</div>
+          <div class="kpi-delta up">↑ 31%</div>
+          <div class="kpi-sub">Personalized routines shown</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Off-topic Rate</div>
+          <div class="kpi-value">2.3%</div>
+          <div class="kpi-delta down">↓ 0.8pp</div>
+          <div class="kpi-sub">Redirected messages</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Drop-off Point (avg)</div>
+          <div class="kpi-value">msg 4.2</div>
+          <div class="kpi-delta neutral">— stable</div>
+          <div class="kpi-sub">Where users tend to stop</div>
+        </div>
+      </div>
+
+      <!-- Charts row 1 -->
+      <div class="charts-row" style="margin-bottom:14px">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Sessions & Messages over time</div>
+              <div class="chart-sub">Daily volume — last 30 days</div>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="sessionsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Top Health Goals</div>
+              <div class="chart-sub">What users are asking about</div>
+            </div>
+          </div>
+          <div style="padding-top:8px">
+            <div class="topics-list">
+              <div class="topic-row">
+                <span class="topic-label">Sleep & Recovery</span>
+                <div class="topic-bar-wrap"><div class="topic-bar" style="width:78%"></div></div>
+                <span class="topic-pct">78%</span>
+              </div>
+              <div class="topic-row">
+                <span class="topic-label">Energy & Focus</span>
+                <div class="topic-bar-wrap"><div class="topic-bar" style="width:64%"></div></div>
+                <span class="topic-pct">64%</span>
+              </div>
+              <div class="topic-row">
+                <span class="topic-label">Skin & Hair</span>
+                <div class="topic-bar-wrap"><div class="topic-bar" style="width:51%"></div></div>
+                <span class="topic-pct">51%</span>
+              </div>
+              <div class="topic-row">
+                <span class="topic-label">Immunity</span>
+                <div class="topic-bar-wrap"><div class="topic-bar" style="width:43%"></div></div>
+                <span class="topic-pct">43%</span>
+              </div>
+              <div class="topic-row">
+                <span class="topic-label">Muscle & Fitness</span>
+                <div class="topic-bar-wrap"><div class="topic-bar" style="width:35%"></div></div>
+                <span class="topic-pct">35%</span>
+              </div>
+              <div class="topic-row">
+                <span class="topic-label">Gut Health</span>
+                <div class="topic-bar-wrap"><div class="topic-bar" style="width:28%"></div></div>
+                <span class="topic-pct">28%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Off-topic monitor -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Off-topic Monitor</div>
+            <div class="chart-sub">Recent redirected messages — sample</div>
+          </div>
+          <span class="tag tag-green">2.3% rate · within threshold</span>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>User message</th>
+              <th>Category</th>
+              <th>Session</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Can you recommend a good Italian restaurant in Tokyo?</td>
+              <td><span class="tag tag-amber">Restaurants</span></td>
+              <td>#a3f9</td>
+              <td>2h ago</td>
+            </tr>
+            <tr>
+              <td>What's the best way to learn Python programming?</td>
+              <td><span class="tag tag-red">Coding</span></td>
+              <td>#b12e</td>
+              <td>5h ago</td>
+            </tr>
+            <tr>
+              <td>Who won the Champions League last night?</td>
+              <td><span class="tag tag-red">Sports</span></td>
+              <td>#c77a</td>
+              <td>8h ago</td>
+            </tr>
+            <tr>
+              <td>Can you write a poem about springtime?</td>
+              <td><span class="tag tag-amber">Creative</span></td>
+              <td>#d04f</td>
+              <td>11h ago</td>
+            </tr>
+            <tr>
+              <td>What flights are cheapest from LA to Tokyo?</td>
+              <td><span class="tag tag-amber">Travel</span></td>
+              <td>#e91b</td>
+              <td>1d ago</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── SECTION 2: iHerb collaboration metrics ── -->
+    <div class="section-spacer">
+      <div class="section-header">
+        <span class="section-title">Commerce Metrics</span>
+        <span class="section-badge badge-iherb">⚑ Requires iHerb Integration</span>
+        <span class="section-line"></span>
+        <span class="section-note">Needs iHerb product catalog & transaction data</span>
+      </div>
+
+      <!-- KPI row 1 -->
+      <div class="kpi-grid kpi-grid-3" style="margin-bottom:14px">
+        <div class="kpi-card dashed">
+          <div class="kpi-label">Conversion Rate</div>
+          <div class="kpi-value">8.4%</div>
+          <div class="kpi-delta up">↑ 2.1pp vs non-guide users</div>
+          <div class="requires-tag">⚑ iHerb purchase events</div>
+        </div>
+        <div class="kpi-card dashed amber">
+          <div class="kpi-label">Avg. Order Value (Guide users)</div>
+          <div class="kpi-value">$74.20</div>
+          <div class="kpi-delta up">↑ 23% vs site average</div>
+          <div class="requires-tag">⚑ iHerb order data</div>
+        </div>
+        <div class="kpi-card dashed amber">
+          <div class="kpi-label">AOV Lift vs. Non-guide users</div>
+          <div class="kpi-value">+$13.80</div>
+          <div class="kpi-delta up">↑ per order</div>
+          <div class="requires-tag">⚑ iHerb user segments</div>
+        </div>
+      </div>
+
+      <!-- KPI row 2 -->
+      <div class="kpi-grid kpi-grid-3" style="margin-bottom:14px">
+        <div class="kpi-card dashed">
+          <div class="kpi-label">Cart Add Rate</div>
+          <div class="kpi-value">31.7%</div>
+          <div class="kpi-delta up">↑ 11pp vs non-guide</div>
+          <div class="requires-tag">⚑ iHerb cart events</div>
+        </div>
+        <div class="kpi-card dashed">
+          <div class="kpi-label">Product Click-through Rate</div>
+          <div class="kpi-value">44.2%</div>
+          <div class="kpi-delta up">↑ 18% vs prev period</div>
+          <div class="requires-tag">⚑ iHerb product link API</div>
+        </div>
+        <div class="kpi-card dashed amber">
+          <div class="kpi-label">Revenue Attributed to Guide</div>
+          <div class="kpi-value">$1.84M</div>
+          <div class="kpi-delta up">↑ 34% this period</div>
+          <div class="requires-tag">⚑ iHerb revenue attribution</div>
+        </div>
+      </div>
+
+      <!-- Charts row -->
+      <div class="charts-row charts-row-equal" style="margin-bottom:14px">
+        <div class="chart-card dashed">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Conversion Rate over time</div>
+              <div class="chart-sub">Guide users vs. non-guide users</div>
+            </div>
+            <span class="requires-tag">⚑ iHerb purchase events</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="conversionChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card dashed">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Top Recommended → Purchased</div>
+              <div class="chart-sub">Which recommendations convert best</div>
+            </div>
+            <span class="requires-tag">⚑ iHerb order data</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="productsChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue chart full width -->
+      <div class="chart-card dashed">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Revenue Attributed to Guide</div>
+            <div class="chart-sub">Monthly revenue from guide-assisted purchases</div>
+          </div>
+          <span class="requires-tag">⚑ iHerb revenue attribution</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── Sessions & Messages chart ──
+const ctx = document.getElementById('sessionsChart').getContext('2d');
+
+const labels = Array.from({length: 30}, (_, i) => {
+  const d = new Date();
+  d.setDate(d.getDate() - (29 - i));
+  return d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
+});
+
+// Simulated data with realistic variance
+const sessions = labels.map((_, i) =>
+  Math.round(600 + Math.sin(i * 0.4) * 120 + Math.random() * 80 + i * 12)
+);
+const messages = sessions.map(s => Math.round(s * (5.5 + Math.random() * 1.2)));
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Messages',
+        data: messages,
+        backgroundColor: 'rgba(78,154,78,0.15)',
+        borderColor: 'rgba(78,154,78,0.4)',
+        borderWidth: 1,
+        borderRadius: 3,
+        yAxisID: 'y1',
+        order: 2,
+      },
+      {
+        label: 'Sessions',
+        data: sessions,
+        type: 'line',
+        borderColor: '#2d5a2d',
+        backgroundColor: 'rgba(45,90,45,0.08)',
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        fill: true,
+        tension: 0.4,
+        yAxisID: 'y',
+        order: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          font: { family: 'Plus Jakarta Sans', size: 11 },
+          color: '#7a9270',
+          boxWidth: 12,
+          padding: 14,
+        }
+      },
+      tooltip: {
+        backgroundColor: '#0f2410',
+        titleFont: { family: 'Plus Jakarta Sans', size: 11 },
+        bodyFont: { family: 'Plus Jakarta Sans', size: 11 },
+        padding: 10,
+        cornerRadius: 8,
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: {
+          font: { family: 'Plus Jakarta Sans', size: 10 },
+          color: '#7a9270',
+          maxTicksLimit: 8,
+        }
+      },
+      y: {
+        position: 'left',
+        grid: { color: '#eaf4ea' },
+        ticks: {
+          font: { family: 'Plus Jakarta Sans', size: 10 },
+          color: '#7a9270',
+        }
+      },
+      y1: {
+        position: 'right',
+        grid: { display: false },
+        ticks: {
+          font: { family: 'Plus Jakarta Sans', size: 10 },
+          color: '#95c995',
+        }
+      }
+    }
+  }
+});
+
+// ── Conversion Rate chart ──
+const convCtx = document.getElementById('conversionChart').getContext('2d');
+const convLabels = labels.filter((_, i) => i % 3 === 0);
+const guideConv  = convLabels.map((_, i) => +(6.2 + Math.sin(i * 0.5) * 0.8 + i * 0.18 + Math.random() * 0.4).toFixed(1));
+const siteConv   = convLabels.map((_, i) => +(3.8 + Math.sin(i * 0.5) * 0.4 + i * 0.06 + Math.random() * 0.3).toFixed(1));
+
+new Chart(convCtx, {
+  type: 'line',
+  data: {
+    labels: convLabels,
+    datasets: [
+      {
+        label: 'Guide users',
+        data: guideConv,
+        borderColor: '#2d5a2d',
+        backgroundColor: 'rgba(45,90,45,0.08)',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: '#2d5a2d',
+        fill: true,
+        tension: 0.4,
+      },
+      {
+        label: 'Non-guide users',
+        data: siteConv,
+        borderColor: '#c2e0c2',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [4, 4],
+        pointRadius: 3,
+        pointBackgroundColor: '#c2e0c2',
+        tension: 0.4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: { font: { family: 'Plus Jakarta Sans', size: 11 }, color: '#7a9270', boxWidth: 12, padding: 12 }
+      },
+      tooltip: {
+        backgroundColor: '#0f2410',
+        titleFont: { family: 'Plus Jakarta Sans', size: 11 },
+        bodyFont: { family: 'Plus Jakarta Sans', size: 11 },
+        padding: 10, cornerRadius: 8,
+        callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y}%` }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { family: 'Plus Jakarta Sans', size: 10 }, color: '#7a9270', maxTicksLimit: 6 } },
+      y: { grid: { color: '#f0f7f0' }, ticks: { font: { family: 'Plus Jakarta Sans', size: 10 }, color: '#7a9270', callback: v => v + '%' } }
+    }
+  }
+});
+
+// ── Top Products chart ──
+const prodCtx = document.getElementById('productsChart').getContext('2d');
+new Chart(prodCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Vitamin D3', 'Magnesium', 'Omega-3', 'Collagen', 'Ashwagandha', 'Probiotics'],
+    datasets: [{
+      label: 'Purchase rate after recommendation',
+      data: [62, 54, 49, 43, 38, 31],
+      backgroundColor: [
+        'rgba(45,90,45,0.85)', 'rgba(45,90,45,0.72)', 'rgba(45,90,45,0.60)',
+        'rgba(45,90,45,0.48)', 'rgba(45,90,45,0.38)', 'rgba(45,90,45,0.28)',
+      ],
+      borderRadius: 5,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0f2410',
+        titleFont: { family: 'Plus Jakarta Sans', size: 11 },
+        bodyFont: { family: 'Plus Jakarta Sans', size: 11 },
+        padding: 10, cornerRadius: 8,
+        callbacks: { label: ctx => ` ${ctx.parsed.x}% purchase rate` }
+      }
+    },
+    scales: {
+      x: { grid: { color: '#f0f7f0' }, ticks: { font: { family: 'Plus Jakarta Sans', size: 10 }, color: '#7a9270', callback: v => v + '%' } },
+      y: { grid: { display: false }, ticks: { font: { family: 'Plus Jakarta Sans', size: 11 }, color: '#3a4f3a' } }
+    }
+  }
+});
+
+// ── Revenue chart ──
+const revCtx = document.getElementById('revenueChart').getContext('2d');
+const revLabels = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
+const revenue   = [820000, 940000, 1280000, 1350000, 1620000, 1840000];
+
+new Chart(revCtx, {
+  type: 'bar',
+  data: {
+    labels: revLabels,
+    datasets: [{
+      label: 'Revenue attributed to guide',
+      data: revenue,
+      backgroundColor: revenue.map((_, i) =>
+        i === revenue.length - 1 ? 'rgba(45,90,45,0.9)' : 'rgba(45,90,45,0.45)'
+      ),
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0f2410',
+        titleFont: { family: 'Plus Jakarta Sans', size: 11 },
+        bodyFont: { family: 'Plus Jakarta Sans', size: 11 },
+        padding: 10, cornerRadius: 8,
+        callbacks: { label: ctx => ` $${(ctx.parsed.y / 1000000).toFixed(2)}M` }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { family: 'Plus Jakarta Sans', size: 11 }, color: '#7a9270' } },
+      y: {
+        grid: { color: '#f0f7f0' },
+        ticks: { font: { family: 'Plus Jakarta Sans', size: 10 }, color: '#7a9270', callback: v => '$' + (v / 1000000).toFixed(1) + 'M' }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
