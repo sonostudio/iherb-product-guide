@@ -5,12 +5,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
-from routers import chat
+from routers import chat, client_config
 
 app = FastAPI(
-    title="iHerb Conversational Supplement Guide",
-    description="AI-powered supplement recommendation API",
-    version="0.1.0",
+    title="Conversational Product Guide",
+    description="AI-powered product recommendation API",
+    version="0.2.0",
 )
 
 # CORS — allow the React frontend during development
@@ -23,8 +23,10 @@ app.add_middleware(
 )
 
 app.include_router(chat.router)
+app.include_router(client_config.router)
 
 
 @app.get("/health")
 async def health():
-    return {"status": "ok"}
+    client_id = os.environ.get("CLIENT", "dhc")
+    return {"status": "ok", "client": client_id}

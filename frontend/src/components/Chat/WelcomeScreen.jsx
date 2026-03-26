@@ -1,29 +1,28 @@
-const ICEBREAKERS = [
-  { emoji: "⚡", label: "Boost my energy levels" },
-  { emoji: "😴", label: "Help me sleep better" },
-  { emoji: "✨", label: "Improve my skin & hair" },
-  { emoji: "🧠", label: "Support focus & mental clarity" },
-  { emoji: "💪", label: "Build muscle & recovery" },
-  { emoji: "🛡️", label: "Strengthen my immune system" },
-]
+export function WelcomeScreen({ config, onIcebreaker }) {
+  const { badge, title, subtitle, icebreakerLabel, icebreakers } = config
 
-export function WelcomeScreen({ onIcebreaker }) {
+  // Support \n line breaks in title
+  const titleLines = title.split('\n')
+
   return (
     <div className="welcome-screen">
       <div className="welcome-hero">
-        <div className="welcome-badge">iHerb AI Guide</div>
+        <div className="welcome-badge">{badge}</div>
         <h1 className="welcome-title">
-          Your personal<br />supplement advisor
+          {titleLines.map((line, i) => (
+            <span key={i}>
+              {line}
+              {i < titleLines.length - 1 && <br />}
+            </span>
+          ))}
         </h1>
-        <p className="welcome-subtitle">
-          Tell me your health goals and I'll build a personalized supplement routine just for you.
-        </p>
+        <p className="welcome-subtitle">{subtitle}</p>
       </div>
 
       <div className="icebreaker-section">
-        <p className="icebreaker-label">Where would you like to start?</p>
+        <p className="icebreaker-label">{icebreakerLabel}</p>
         <div className="icebreaker-grid">
-          {ICEBREAKERS.map(({ emoji, label }) => (
+          {icebreakers.map(({ emoji, label }) => (
             <button
               key={label}
               className="icebreaker-btn"

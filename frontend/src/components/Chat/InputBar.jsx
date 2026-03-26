@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 
-export function InputBar({ onSend, disabled }) {
+export function InputBar({ onSend, disabled, placeholder }) {
   const [value, setValue] = useState('')
   const textareaRef = useRef(null)
 
-  // Auto-resize textarea height as content grows
   useEffect(() => {
     const el = textareaRef.current
     if (!el) return
@@ -17,7 +16,6 @@ export function InputBar({ onSend, disabled }) {
     if (!value.trim() || disabled) return
     onSend(value.trim())
     setValue('')
-    // Reset height after send
     if (textareaRef.current) textareaRef.current.style.height = 'auto'
   }
 
@@ -28,19 +26,26 @@ export function InputBar({ onSend, disabled }) {
     }
   }
 
+  const isEmpty = !value.trim()
+
   return (
     <form className="input-bar" onSubmit={handleSubmit}>
       <textarea
         ref={textareaRef}
         className="input-field"
-        placeholder="Describe your health goals or ask about a supplement..."
+        placeholder={placeholder ?? 'Type a message...'}
         value={value}
         onChange={e => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
         disabled={disabled}
         rows={2}
       />
-      <button className="send-btn" type="submit" disabled={disabled || !value.trim()}>
+      <button
+        className={`send-btn ${isEmpty ? 'send-btn--empty' : ''}`}
+        type="submit"
+        disabled={disabled}
+        aria-label="Send message"
+      >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
           <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
         </svg>

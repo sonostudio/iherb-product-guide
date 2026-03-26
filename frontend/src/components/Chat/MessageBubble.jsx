@@ -1,4 +1,5 @@
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 export function MessageBubble({ message }) {
   const isUser = message.role === 'user'
@@ -15,7 +16,7 @@ export function MessageBubble({ message }) {
       <div className={`bubble ${isUser ? 'bubble-user' : 'bubble-assistant'}`}>
         {isUser
           ? <p>{message.content}</p>
-          : <ReactMarkdown>{message.content}</ReactMarkdown>
+          : <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
         }
       </div>
     </div>
