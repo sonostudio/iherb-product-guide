@@ -1,10 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <title>Product Guide</title>
+    <!-- Set data-client before any CSS loads to prevent flash of wrong theme -->
+    <script>
+      document.documentElement.setAttribute(
+        'data-client',
+        new URLSearchParams(window.location.search).get('client') ||
+        (typeof __VITE_CLIENT__ !== 'undefined' ? __VITE_CLIENT__ : 'dhc')
+      );
+    </script>
   </head>
   <body>
     <div id="root"></div>

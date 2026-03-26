@@ -1,0 +1,165 @@
+/*
+ * Client theme overrides.
+ * Applied via <html data-client="xxx"> set in index.html.
+ * No JS timing issues — CSS variables are available on first paint.
+ */
+
+/* ── DHC — warm red ─────────────────────────────────────────── */
+[data-client="dhc"] {
+  --green-950: #1a0a0a;
+  --green-800: #6b1a1a;
+  --green-700: #9b2c2c;
+  --green-600: #c53030;
+  --green-500: #e53e3e;
+  --green-300: #fc8181;
+  --green-200: #fed7d7;
+  --green-100: #fff5f5;
+  --green-50:  #fff8f8;
+  --text-primary:   #1a0505;
+  --text-secondary: #742a2a;
+  --text-muted:     #c05621;
+}
+
+/* ── ORBIS — blue ───────────────────────────────────────────── */
+[data-client="orbis"] {
+  --green-950: #0a1020;
+  --green-800: #1a2a5e;
+  --green-700: #2a4494;
+  --green-600: #3b5ec7;
+  --green-500: #4c72e0;
+  --green-300: #90aef0;
+  --green-200: #c7d7fa;
+  --green-100: #eef2fd;
+  --green-50:  #f5f8ff;
+  --text-primary:   #0a1020;
+  --text-secondary: #2a3f7a;
+  --text-muted:     #5a72b0;
+}
+
+/* ── FANCL — fresh green ────────────────────────────────────── */
+[data-client="fancl"] {
+  --green-950: #0d1a10;
+  --green-800: #1a4025;
+  --green-700: #276034;
+  --green-600: #348045;
+  --green-500: #3d9e52;
+  --green-300: #7ecb90;
+  --green-200: #b8e8c2;
+  --green-100: #e8f7ec;
+  --green-50:  #f3fbf5;
+  --text-primary:   #0d1a10;
+  --text-secondary: #1e5530;
+  --text-muted:     #4a8a5a;
+}
+
+/* ── Montbell — sky blue ────────────────────────────────────── */
+[data-client="montbell"] {
+  --green-950: #0a1520;
+  --green-800: #0f3460;
+  --green-700: #154e8a;
+  --green-600: #1a6ab5;
+  --green-500: #2080d0;
+  --green-300: #70b8f0;
+  --green-200: #b8dcf8;
+  --green-100: #e8f4fd;
+  --green-50:  #f2f9ff;
+  --text-primary:   #0a1520;
+  --text-secondary: #0f3460;
+  --text-muted:     #3a6a9a;
+}
+
+/* ── Goldwin — charcoal ─────────────────────────────────────── */
+[data-client="goldwin"] {
+  --green-950: #0f0f0f;
+  --green-800: #1a1a1a;
+  --green-700: #2d2d2d;
+  --green-600: #404040;
+  --green-500: #555555;
+  --green-300: #999999;
+  --green-200: #cccccc;
+  --green-100: #f0f0f0;
+  --green-50:  #f8f8f8;
+  --text-primary:   #0f0f0f;
+  --text-secondary: #333333;
+  --text-muted:     #777777;
+}
+
+/* ── Descente — crimson ─────────────────────────────────────── */
+[data-client="descente"] {
+  --green-950: #10050a;
+  --green-800: #500a20;
+  --green-700: #7a1030;
+  --green-600: #a01840;
+  --green-500: #c02050;
+  --green-300: #e87090;
+  --green-200: #f5b8c8;
+  --green-100: #fce8ee;
+  --green-50:  #fef4f7;
+  --text-primary:   #10050a;
+  --text-secondary: #600a25;
+  --text-muted:     #a04060;
+}
+
+/* ── Patagonia — earthy green ───────────────────────────────── */
+[data-client="patagonia"] {
+  --green-950: #0a1505;
+  --green-800: #1a3a0a;
+  --green-700: #2a5a10;
+  --green-600: #3a7a18;
+  --green-500: #4a9420;
+  --green-300: #8acc60;
+  --green-200: #c0e898;
+  --green-100: #e8f7d8;
+  --green-50:  #f2fbea;
+  --text-primary:   #0a1505;
+  --text-secondary: #1a4008;
+  --text-muted:     #4a7a20;
+}
+
+/* ── Snow Peak — midnight navy ──────────────────────────────── */
+[data-client="snowpeak"] {
+  --green-950: #0d0d10;
+  --green-800: #1a1a2e;
+  --green-700: #2a2a4a;
+  --green-600: #3a3a6a;
+  --green-500: #4a4a8a;
+  --green-300: #8a8abe;
+  --green-200: #c0c0e0;
+  --green-100: #eaeaf5;
+  --green-50:  #f5f5fb;
+  --text-primary:   #0d0d10;
+  --text-secondary: #2a2a4a;
+  --text-muted:     #5a5a8a;
+}
+
+/* ── POLA — violet ──────────────────────────────────────────── */
+[data-client="pola"] {
+  --green-950: #120510;
+  --green-800: #3d0a35;
+  --green-700: #5e1050;
+  --green-600: #801870;
+  --green-500: #a02090;
+  --green-300: #d070c0;
+  --green-200: #eab8e0;
+  --green-100: #f8e8f5;
+  --green-50:  #fdf3fc;
+  --text-primary:   #120510;
+  --text-secondary: #4a0a40;
+  --text-muted:     #903080;
+}
+
+/* ── Enoteca — burgundy ─────────────────────────────────────── */
+[data-client="enoteca"] {
+  --green-950: #10050a;
+  --green-800: #3d0f20;
+  --green-700: #641830;
+  --green-600: #8c2040;
+  --green-500: #a82850;
+  --green-300: #d87090;
+  --green-200: #f0b8c8;
+  --green-100: #fae8ee;
+  --green-50:  #fdf4f7;
+  --text-primary:   #10050a;
+  --text-secondary: #4a1020;
+  --text-muted:     #903050;
+}

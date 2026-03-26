@@ -1,33 +1,36 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useChat } from '../hooks/useChat'
 import { MessageList } from '../components/Chat/MessageList'
 import { InputBar } from '../components/Chat/InputBar'
 import { WelcomeScreen } from '../components/Chat/WelcomeScreen'
 import { getClientConfig } from '../config/clients'
 
-const clientConfig = getClientConfig()
-
-// Inject brand color CSS variables into :root at load time
-function applyClientTheme(colors) {
-  const root = document.documentElement
-  Object.entries(colors).forEach(([key, value]) => {
-    // Map --brand-* variables to the --green-* names used throughout CSS
-    const cssKey = key.replace('--brand-', '--green-')
-    root.style.setProperty(cssKey, value)
-  })
-  // Also set text overrides
-  root.style.setProperty('--text-primary',   colors['--text-primary'])
-  root.style.setProperty('--text-secondary', colors['--text-secondary'])
-  root.style.setProperty('--text-muted',     colors['--text-muted'])
-}
-
 export function ChatPage() {
   const { messages, loading, error, send, reset } = useChat()
+  const [clientConfig] = useState(() => {
+    try {
+      return getClientConfig()
+    } catch (e) {
+      console.error('Failed to load client config:', e)
+      return null
+    }
+  })
 
   useEffect(() => {
-    applyClientTheme(clientConfig.colors)
+    if (!clientConfig) return
     document.title = `${clientConfig.brandName} ${clientConfig.tagline}`
-  }, [])
+  }, [clientConfig])
+
+  // Fallback if config failed to load
+  if (!clientConfig) {
+    return (
+      <div style={{ padding: 40, fontFamily: 'sans-serif', color: '#333' }}>
+        <h2>設定エラー / Config Error</h2>
+        <p>CLIENT config could not be loaded. Check the browser console for details.</p>
+        <p>Current VITE_CLIENT: <code>{import.meta.env.VITE_CLIENT || '(not set)'}</code></p>
+      </div>
+    )
+  }
 
   const handleIcebreaker = (text) => {
     send(text)
