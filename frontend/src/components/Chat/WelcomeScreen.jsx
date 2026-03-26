@@ -1,7 +1,8 @@
-export function WelcomeScreen({ config, onIcebreaker }) {
+import { InputBar } from './InputBar'
+
+export function WelcomeScreen({ config, onIcebreaker, onSend, disabled, disclaimer, error }) {
   const { badge, title, subtitle, icebreakerLabel, icebreakers } = config
 
-  // Support \n line breaks in title
   const titleLines = title.split('\n')
 
   return (
@@ -19,13 +20,19 @@ export function WelcomeScreen({ config, onIcebreaker }) {
         <p className="welcome-subtitle">{subtitle}</p>
       </div>
 
+      <div className="welcome-input-wrap">
+        {error && <p className="error-msg">{error}</p>}
+        <InputBar onSend={onSend} disabled={disabled} />
+        <p className="disclaimer">{disclaimer}</p>
+      </div>
+
       <div className="icebreaker-section">
         <p className="icebreaker-label">{icebreakerLabel}</p>
-        <div className="icebreaker-grid">
+        <div className="icebreaker-chips">
           {icebreakers.map(({ emoji, label }) => (
             <button
               key={label}
-              className="icebreaker-btn"
+              className="icebreaker-chip"
               onClick={() => onIcebreaker(label)}
             >
               <span className="icebreaker-emoji">{emoji}</span>

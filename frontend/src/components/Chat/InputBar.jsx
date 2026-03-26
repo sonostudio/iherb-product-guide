@@ -19,13 +19,6 @@ export function InputBar({ onSend, disabled, placeholder }) {
     if (textareaRef.current) textareaRef.current.style.height = 'auto'
   }
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmit(e)
-    }
-  }
-
   const isEmpty = !value.trim()
 
   return (
@@ -36,7 +29,6 @@ export function InputBar({ onSend, disabled, placeholder }) {
         placeholder={placeholder ?? 'Type a message...'}
         value={value}
         onChange={e => setValue(e.target.value)}
-        onKeyDown={handleKeyDown}
         disabled={disabled}
         rows={2}
       />
