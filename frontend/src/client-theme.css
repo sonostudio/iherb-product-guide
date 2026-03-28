@@ -1,165 +1,140 @@
 /*
  * Client theme overrides.
- * Applied via <html data-client="xxx"> set in index.html.
- * No JS timing issues — CSS variables are available on first paint.
+ * Applied via <html data-client="xxx"> set in main.jsx.
+ * White base theme — brand accent color only.
  */
 
-/* ── DHC — warm red ─────────────────────────────────────────── */
+/* ── Shared light base (all clients) ───────────────────────── */
+[data-client] {
+  --brand-950: #111111;
+  --brand-800: #222222;
+  --brand-700: #333333;
+  --brand-600: #555555;
+  --brand-500: #777777;
+  --brand-300: #cccccc;
+  --brand-200: #e8e8e8;
+  --brand-100: #f4f4f4;
+  --brand-50:  #ffffff;
+  --text-primary:   #111111;
+  --text-secondary: #444444;
+  --text-muted:     #999999;
+
+  --font-body:          'Inter', sans-serif;
+  --font-display:       'Barlow Condensed', sans-serif;
+  --font-logo:          'Inter', sans-serif;
+  --font-logo-weight:   700;
+  --font-logo-tracking: 0.06em;
+  --font-hero-weight:   300;
+  --font-hero-tracking: -0.5px;
+  --font-label-tracking: 0.08em;
+}
+
+/* ── DHC — red ──────────────────────────────────────────────── */
 [data-client="dhc"] {
-  --brand-950: #1a0a0a;
-  --brand-800: #6b1a1a;
-  --brand-700: #9b2c2c;
-  --brand-600: #c53030;
-  --brand-500: #e53e3e;
-  --brand-300: #fc8181;
-  --brand-200: #fed7d7;
+  --brand-700: #c53030;
+  --brand-600: #e53e3e;
+  --brand-500: #fc8181;
+  --brand-300: #fed7d7;
+  --brand-200: #fff0f0;
   --brand-100: #fff5f5;
-  --brand-50:  #fff8f8;
-  --text-primary:   #1a0505;
-  --text-secondary: #742a2a;
-  --text-muted:     #c05621;
+  --brand-50:  #ffffff;
 }
 
 /* ── ORBIS — blue ───────────────────────────────────────────── */
 [data-client="orbis"] {
-  --brand-950: #0a1020;
-  --brand-800: #1a2a5e;
   --brand-700: #2a4494;
   --brand-600: #3b5ec7;
-  --brand-500: #4c72e0;
-  --brand-300: #90aef0;
-  --brand-200: #c7d7fa;
-  --brand-100: #eef2fd;
-  --brand-50:  #f5f8ff;
-  --text-primary:   #0a1020;
-  --text-secondary: #2a3f7a;
-  --text-muted:     #5a72b0;
+  --brand-500: #90aef0;
+  --brand-300: #c7d7fa;
+  --brand-200: #e8effd;
+  --brand-100: #f2f5fe;
+  --brand-50:  #ffffff;
 }
 
-/* ── FANCL — fresh green ────────────────────────────────────── */
+/* ── FANCL — green ──────────────────────────────────────────── */
 [data-client="fancl"] {
-  --brand-950: #0d1a10;
-  --brand-800: #1a4025;
   --brand-700: #276034;
   --brand-600: #348045;
-  --brand-500: #3d9e52;
-  --brand-300: #7ecb90;
-  --brand-200: #b8e8c2;
-  --brand-100: #e8f7ec;
-  --brand-50:  #f3fbf5;
-  --text-primary:   #0d1a10;
-  --text-secondary: #1e5530;
-  --text-muted:     #4a8a5a;
+  --brand-500: #7ecb90;
+  --brand-300: #b8e8c2;
+  --brand-200: #e0f4e5;
+  --brand-100: #f0faf2;
+  --brand-50:  #ffffff;
 }
 
-/* ── Montbell — sky blue ────────────────────────────────────── */
+/* ── Montbell — blue ────────────────────────────────────────── */
 [data-client="montbell"] {
-  --brand-950: #0a1520;
-  --brand-800: #0f3460;
   --brand-700: #154e8a;
   --brand-600: #1a6ab5;
-  --brand-500: #2080d0;
-  --brand-300: #70b8f0;
-  --brand-200: #b8dcf8;
-  --brand-100: #e8f4fd;
-  --brand-50:  #f2f9ff;
-  --text-primary:   #0a1520;
-  --text-secondary: #0f3460;
-  --text-muted:     #3a6a9a;
+  --brand-500: #70b8f0;
+  --brand-300: #b8dcf8;
+  --brand-200: #e0f0fd;
+  --brand-100: #f0f7fe;
+  --brand-50:  #ffffff;
 }
 
-/* ── Goldwin — charcoal ─────────────────────────────────────── */
+/* ── Goldwin — black ────────────────────────────────────────── */
 [data-client="goldwin"] {
-  --brand-950: #0f0f0f;
-  --brand-800: #1a1a1a;
-  --brand-700: #2d2d2d;
-  --brand-600: #404040;
-  --brand-500: #555555;
-  --brand-300: #999999;
-  --brand-200: #cccccc;
-  --brand-100: #f0f0f0;
-  --brand-50:  #f8f8f8;
-  --text-primary:   #0f0f0f;
-  --text-secondary: #333333;
-  --text-muted:     #777777;
+  --brand-700: #111111;
+  --brand-600: #333333;
+  --brand-500: #888888;
+  --brand-300: #cccccc;
+  --brand-200: #e8e8e8;
+  --brand-100: #f4f4f4;
+  --brand-50:  #ffffff;
 }
 
 /* ── Descente — crimson ─────────────────────────────────────── */
 [data-client="descente"] {
-  --brand-950: #10050a;
-  --brand-800: #500a20;
   --brand-700: #7a1030;
   --brand-600: #a01840;
-  --brand-500: #c02050;
-  --brand-300: #e87090;
-  --brand-200: #f5b8c8;
-  --brand-100: #fce8ee;
-  --brand-50:  #fef4f7;
-  --text-primary:   #10050a;
-  --text-secondary: #600a25;
-  --text-muted:     #a04060;
+  --brand-500: #e87090;
+  --brand-300: #f5b8c8;
+  --brand-200: #fce4ec;
+  --brand-100: #fef0f4;
+  --brand-50:  #ffffff;
 }
 
-/* ── Patagonia — earthy green ───────────────────────────────── */
+/* ── Patagonia — green ──────────────────────────────────────── */
 [data-client="patagonia"] {
-  --brand-950: #0a1505;
-  --brand-800: #1a3a0a;
   --brand-700: #2a5a10;
   --brand-600: #3a7a18;
-  --brand-500: #4a9420;
-  --brand-300: #8acc60;
-  --brand-200: #c0e898;
-  --brand-100: #e8f7d8;
-  --brand-50:  #f2fbea;
-  --text-primary:   #0a1505;
-  --text-secondary: #1a4008;
-  --text-muted:     #4a7a20;
+  --brand-500: #8acc60;
+  --brand-300: #c0e898;
+  --brand-200: #e2f5d0;
+  --brand-100: #f1faeb;
+  --brand-50:  #ffffff;
 }
 
-/* ── Snow Peak — midnight navy ──────────────────────────────── */
+/* ── Snow Peak — navy ───────────────────────────────────────── */
 [data-client="snowpeak"] {
-  --brand-950: #0d0d10;
-  --brand-800: #1a1a2e;
   --brand-700: #2a2a4a;
   --brand-600: #3a3a6a;
-  --brand-500: #4a4a8a;
-  --brand-300: #8a8abe;
-  --brand-200: #c0c0e0;
-  --brand-100: #eaeaf5;
-  --brand-50:  #f5f5fb;
-  --text-primary:   #0d0d10;
-  --text-secondary: #2a2a4a;
-  --text-muted:     #5a5a8a;
+  --brand-500: #8a8abe;
+  --brand-300: #c0c0e0;
+  --brand-200: #e4e4f2;
+  --brand-100: #f2f2f8;
+  --brand-50:  #ffffff;
 }
 
 /* ── POLA — violet ──────────────────────────────────────────── */
 [data-client="pola"] {
-  --brand-950: #120510;
-  --brand-800: #3d0a35;
   --brand-700: #5e1050;
   --brand-600: #801870;
-  --brand-500: #a02090;
-  --brand-300: #d070c0;
-  --brand-200: #eab8e0;
-  --brand-100: #f8e8f5;
-  --brand-50:  #fdf3fc;
-  --text-primary:   #120510;
-  --text-secondary: #4a0a40;
-  --text-muted:     #903080;
+  --brand-500: #d070c0;
+  --brand-300: #eab8e0;
+  --brand-200: #f5e0f2;
+  --brand-100: #faf0f8;
+  --brand-50:  #ffffff;
 }
 
 /* ── Enoteca — burgundy ─────────────────────────────────────── */
 [data-client="enoteca"] {
-  --brand-950: #10050a;
-  --brand-800: #3d0f20;
   --brand-700: #641830;
   --brand-600: #8c2040;
-  --brand-500: #a82850;
-  --brand-300: #d87090;
-  --brand-200: #f0b8c8;
-  --brand-100: #fae8ee;
-  --brand-50:  #fdf4f7;
-  --text-primary:   #10050a;
-  --text-secondary: #4a1020;
-  --text-muted:     #903050;
+  --brand-500: #d87090;
+  --brand-300: #f0b8c8;
+  --brand-200: #fae0e8;
+  --brand-100: #fdf0f4;
+  --brand-50:  #ffffff;
 }

@@ -51,7 +51,7 @@ def get_chat_response(history: list[Message], user_message: str) -> tuple[str, b
 
     response = _client.messages.create(
         model="claude-haiku-4-5",
-        max_tokens=1024,
+        max_tokens=2048,
         system=SYSTEM_PROMPT,
         messages=messages,
     )

@@ -16,7 +16,18 @@ export function MessageBubble({ message }) {
       <div className={`bubble ${isUser ? 'bubble-user' : 'bubble-assistant'}`}>
         {isUser
           ? <p>{message.content}</p>
-          : <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+          : (
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                a: ({ href, children }) => (
+                  <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>
+                )
+              }}
+            >
+              {message.content}
+            </ReactMarkdown>
+          )
         }
       </div>
     </div>
